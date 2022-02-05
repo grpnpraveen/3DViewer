@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Loading</title>
+    <link rel="stylesheet" href="Model.css">
+</head>
+<body>
+    <div id="con">
+
+        <div id="left">
+
+        </div>
+        <div id="right">
+            <div id="ltop">
+                <canvas id="threed"> </canvas>
+            </div>
+            <div id="lbottom"></div>
+        </div>
+    </div>
+
+</body>
+<script src="./threemin/three.min.js"></script>
+<script src="./threemin/OrbitControls.js"></script>
+<script src="./threemin/RGBELoader.js"></script>
+<script src="./threemin/GLTFLoader.js"></script>
+<script src="./Model.js"></script>
+<script>
+    var left=document.getElementById("left");
+    var models=["Electric Motor","Nano board","Room"];
+    paths=["motor","nano","room"]
+    var count=0;
+    // var functions=[];
+    models.forEach(element => {
+        console.log(element);
+        left.innerHTML=left.innerHTML + `
+            <div class="item ${count}" id="item${count.toString()}">${element}</div>
+        `;
+
+        count++;
+    });
+
+    console.log("Count"+ count.toString());
+    var pathmid="";
+    var model=null;
+
+
+  
+    for(var i=0;i<count;i++)
+    {
+    console.log(i);
+    let c=document.getElementById("item"+i.toString());
+    c.onclick=()=>{
+       
+        console.log(c.className + "Class Name");
+        let str=c.className.split(" ");
+        console.log(str);
+        pathmid=paths[str[1]];
+
+        loader.load('./3dModels/'+pathmid+'/scene.gltf',function(gltf){
+        scene.remove(model);
+        model=gltf.scene.children[0];
+        model.scale.set(1,1,1)
+        model.position.set(0,0,-1);
+        scene.add(model);    
+                });
+    }
+  
+    };
+
+// GLTF LOADING
+pathmid=paths[0];
+const loader =new THREE.GLTFLoader();
+loader.load('./3dModels/'+pathmid+'/scene.gltf',function(gltf){
+   model=gltf.scene.children[0];
+   model.scale.set(1,1,1)
+   model.position.set(0,0,-1);
+
+   scene.add(model);
+
+});
+
+// GLTF LOADING END
+</script>
+
+
+
+</html>
